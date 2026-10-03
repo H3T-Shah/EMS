@@ -29,9 +29,15 @@ int addEmployee(int count) {
         printf("Employee %d:\n", i + 1);
         printf("Name: ");
         fgets(data[i].name, MAX_NAME_LEN, stdin);
+        // using fget() to obtain string with spaces included
 
         printf("Department: ");
         fgets(data[i].department, MAX_DEPT_LEN, stdin);
+
+
+        // removing trailing new line character
+        data[i].name[ strlen(data[i].name) - 1 ] = '\0';
+        data[i].department[ strlen(data[i].department) - 1 ] = '\0';
 
         printf("Salary: ");
         scanf("%f", data[i].salary);

@@ -19,7 +19,11 @@ int genrateId()
 * Adds a new employee to emp[] (prompts the user for details).
 * Returns the new count (old count + 1), or the unchanged count if full.
 */
-int addEmployee(int count) {
+int addEmployee() {
+    
+    int count;
+    printf("How many employee you want to add?\n:");
+    scanf("%d", &count);
 
     Employee data[count];
 

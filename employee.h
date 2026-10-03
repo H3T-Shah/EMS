@@ -19,7 +19,7 @@ void saveToFile(Employee emp[], int count);
 void nuke();
 
 // employee_ops.c
-int addEmployee(int count);
+int addEmployee();
 void displayAll(Employee emp[], int count);
 int searchById(Employee emp[], int count, int id);
 int updateEmployee(Employee emp[], int count);

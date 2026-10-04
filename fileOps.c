@@ -73,9 +73,9 @@ int saveToFile(Employee emp[], int count)
         fprintf(stderr,
                 "fwrite was NOT able to write all or some data successfully");
 
-    size_t timeStamp = time(0);
+    time_t timeStamp = time(0);
 
-    if (fwrite(&timeStamp, sizeof(size_t), 1, file) != count)
+    if (fwrite(&timeStamp, sizeof(timeStamp), 1, file) != 1)
         fprintf(stderr,
                 "fwrite was NOT able to write timestamp successfully");
 

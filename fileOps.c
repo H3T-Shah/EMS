@@ -66,18 +66,27 @@ int saveToFile(Employee emp[], int count)
     {
         fprintf(stderr,
                 "fwrite was NOT able to write count to file");
+        fclose(file); // Prevent leak
         return -1;
     }
 
     if (fwrite(emp, sizeof(Employee), count, file) != count)
+    {
         fprintf(stderr,
                 "fwrite was NOT able to write all or some data successfully");
+        fclose(file); // Prevent leak
+        return -1;
+    }
 
     time_t timeStamp = time(0);
 
     if (fwrite(&timeStamp, sizeof(timeStamp), 1, file) != 1)
+    {
         fprintf(stderr,
                 "fwrite was NOT able to write timestamp successfully");
+        fclose(file); //Prevent leak
+        return -1;
+    }
 
     if(fclose(file) == EOF)
     {

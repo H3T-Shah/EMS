@@ -4,19 +4,22 @@
 
 // TODO: Make different return code for different errors
 
-int loadFromFile(Employee emp[])
+Employee *loadDataFromFile(int count)
 {
-    int count = 0;
+    FILE *file;
+    file = fopen(FILENAME, "rb");
 
-    // TODO:
-    // 1. Open FILENAME in binary read mode ("rb")
-    // 2. If fopen fails, the file just doesn't exist yet -- return 0
-    // 3. Loop: fread one Employee at a time into emp[count],
-    //    incrementing count each time, until fread returns 0 (EOF)
-    // 4. fclose the file
-    // 5. return count
+    Employee *data = malloc(sizeof(Employee) * count);
 
-    return count;
+    fseek(file, sizeof(int) + sizeof(time_t), 0);
+
+    if (fread(data, sizeof(Employee), count, file) != count)
+    {
+        // Error handling
+    }
+    fclose(file);
+
+    return data;
 }
 
 /*

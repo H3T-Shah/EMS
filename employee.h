@@ -14,7 +14,7 @@ typedef struct{
 } Employee;
 
 // file_ops.c
-int loadFromFile(Employee emp[]);
+Employee *loadDataFromFile(int count);
 int saveToFile(Employee emp[], int count);
 void nuke();
 

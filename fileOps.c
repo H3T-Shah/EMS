@@ -22,10 +22,6 @@ Employee *loadDataFromFile(int count)
     return data;
 }
 
-/*
- * Writes all `count` records from emp[] back to FILENAME,
- * overwriting whatever was there before.
- */
 int saveToFile(Employee emp[], int count)
 {
     /*
@@ -180,6 +176,39 @@ int saveToFile(Employee emp[], int count)
             return -1;
         }
     }
+}
+
+time_t LoadTimeStampFromFile()
+{
+    FILE *file;
+    file = fopen(FILENAME, "rb");
+    if (file == NULL)
+        return 0; // Return 0 if file missing
+
+    time_t timeStamp;
+    if (fread(&timeStamp, sizeof(time_t), 1, file) != 1)
+    {
+        // Error handling
+    }
+    fclose(file);
+    return timeStamp;
+}
+
+int LoadCountFromFile()
+{
+    FILE *file;
+    file = fopen(FILENAME, "rb");
+    if (file == NULL)
+        return 0; // Return 0 if file missing
+
+    int count;
+    fseek(file, sizeof(time_t), SEEK_SET);
+    if (fread(&count, sizeof(int), 1, file) != 1)
+    {
+        // Error handling
+    }
+    fclose(file);
+    return count;
 }
 
 void nuke()

@@ -183,12 +183,16 @@ time_t loadTimeStampFromFile()
     FILE *file;
     file = fopen(FILENAME, "rb");
     if (file == NULL)
-        return 0; // Return 0 if file missing
+    {
+        fprintf(stderr, "Could NOT OPEN FILENAME");
+        return -1; // Return if file missing
+    }
 
     time_t timeStamp;
     if (fread(&timeStamp, sizeof(time_t), 1, file) != 1)
     {
-        // Error handling
+        fprintf(stderr, "Could NOT READ timeStamp");
+        return -1;
     }
     fclose(file);
     return timeStamp;
@@ -199,13 +203,17 @@ int loadCountFromFile()
     FILE *file;
     file = fopen(FILENAME, "rb");
     if (file == NULL)
-        return 0; // Return 0 if file missing
+    {
+        fprintf(stderr, "Could NOT OPEN FILENAME");
+        return -1; // Return if file missing
+    }
 
     int count;
     fseek(file, sizeof(time_t), SEEK_SET);
     if (fread(&count, sizeof(int), 1, file) != 1)
     {
-        // Error handling
+        fprintf(stderr, "Could NOT READ count");
+        return -1;
     }
     fclose(file);
     return count;

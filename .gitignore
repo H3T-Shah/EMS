@@ -1,3 +1,4 @@
 *.exe
 playground.c
 .vscode/
+employees.dat

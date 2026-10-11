@@ -178,7 +178,7 @@ int saveToFile(Employee emp[], int count)
     }
 }
 
-time_t LoadTimeStampFromFile()
+time_t loadTimeStampFromFile()
 {
     FILE *file;
     file = fopen(FILENAME, "rb");
@@ -194,7 +194,7 @@ time_t LoadTimeStampFromFile()
     return timeStamp;
 }
 
-int LoadCountFromFile()
+int loadCountFromFile()
 {
     FILE *file;
     file = fopen(FILENAME, "rb");

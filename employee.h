@@ -16,8 +16,8 @@ typedef struct{
 // file_ops.c
 Employee *loadDataFromFile(int count);
 int saveToFile(Employee emp[], int count);
-time_t LoadTimeStampFromFile();
-int LoadCountFromFile();
+time_t loadTimeStampFromFile();
+int loadCountFromFile();
 void nuke();
 
 // employee_ops.c

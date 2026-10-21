@@ -6,12 +6,11 @@
 int homeScreen()
 {
     /*
-    REGEX HACK
-    /e provides an escape
-    and e [1;1H] place your cursor in the upper right corner of the console screen
-    and e [2J adds a space to the top of all existing screen characters
+    ANSI escape sequences
+    move cursor to row 1, column 1 (ESC[1;1H), then clear the entire screen (ESC[2J)
+    ESC = \e = \x1b
     */
-    printf("\e[1;1H\e[2J");
+    printf("\x1b[1;1H\x1b[2J");
 
     // printing ascii art
 

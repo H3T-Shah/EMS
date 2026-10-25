@@ -220,6 +220,28 @@ int loadCountFromFile()
     return count;
 }
 
+int updateEmployeeData(Employee data, int index)
+{
+    FILE *file = fopen(FILENAME, "r+b");
+
+    if(file == NULL)
+    {
+        fprintf(stderr, "fopen encountered NULL File while trying to update employee record at index: %d", index);
+        return -1;
+    }
+
+    // Moving pointer to the employee who's data has to be updated
+    fseek(file, sizeof(time_t) + sizeof(int) + sizeof(Employee) * index, SEEK_SET);
+
+    if (fwrite(&data, sizeof(Employee), 1, file) != 1)
+    {
+        fprintf(stderr, "Could NOT write updated data of employee");
+        return -2;
+    }
+
+    return 1;
+}
+
 void nuke()
 {
 }

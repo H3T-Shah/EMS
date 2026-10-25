@@ -91,7 +91,10 @@ int main()
         case 4:
             displayAllRecord();
             break;
-            
+
+        case 5:
+            break;
+
         default:
             printf("Invalid choice!!\n");
             break;

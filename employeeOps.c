@@ -113,7 +113,11 @@ int updateEmployee(int id)
 
     printf("Existing data of employee you want to update:\n");
     int indexOfEmployee = searchById(id);
-
+    if(indexOfEmployee == -1)
+    {
+        printf("Didn't find an employee with id: %d", id);
+        return 0;
+    }
     Employee data;
     data.id = id;
 
@@ -136,5 +140,5 @@ int updateEmployee(int id)
     getchar();
     if(updateEmployeeData(data, indexOfEmployee) == 1)
         return 1;
-    return 0;
+    return 2;
 }

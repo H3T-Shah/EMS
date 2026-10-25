@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <time.h>
 #include "employee.h"
 
@@ -193,7 +193,7 @@ time_t loadTimeStampFromFile()
     if (fread(&timeStamp, sizeof(time_t), 1, file) != 1)
     {
         fprintf(stderr, "Could NOT READ timeStamp");
-        return -1;
+        return -2;
     }
     fclose(file);
     return timeStamp;

@@ -1,3 +1,10 @@
+# Compile Instructions
+
+Compile the executable with:
+```
+gcc main.c employeeOps.c fileOps.c -o main
+```
+
 # EMPLOYEE MANGEMENT SYSTEM
 
 **Problem Statement** - Maintain employee ID, name, department and salary details; search, update and display records.

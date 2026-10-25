@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h> // Using srand() & rand()
+#include <stdlib.h> // Using srand() & rand(); malloc() & free()
 #include <string.h> // Using strlen()
-#include <time.h> // Using time() function as a seed for rand()
+#include <time.h>   // Using time() function as a seed for rand()
 #include "employee.h"
 
 int genrateId()
@@ -12,14 +12,14 @@ int genrateId()
     */
     srand(time(0));
     return rand() % (10000 + 1000 + 1) + 1000;
-
 }
 
 /*
-* Adds a new employee to emp[] (prompts the user for details).
-* Returns the new count (old count + 1), or the unchanged count if full.
-*/
-int addEmployee() {
+ * Adds a new employee to emp[] (prompts the user for details).
+ * Returns the new count (old count + 1), or the unchanged count if full.
+ */
+int addEmployee()
+{
 
     int count;
     printf("How many employee you want to add?\n: ");
@@ -28,7 +28,7 @@ int addEmployee() {
 
     Employee data[count];
 
-    //Prompt for name, department, salary; store into emp[count]
+    // Prompt for name, department, salary; store into emp[count]
     for (int i = 0; i < count; i++)
     {
         printf("Employee %d:\n", i + 1);
@@ -41,8 +41,8 @@ int addEmployee() {
         fgets(data[i].department, MAX_DEPT_LEN, stdin);
 
         // removing trailing new line character
-        data[i].name[ strlen(data[i].name) - 1 ] = '\0';
-        data[i].department[ strlen(data[i].department) - 1 ] = '\0';
+        data[i].name[strlen(data[i].name) - 1] = '\0';
+        data[i].department[strlen(data[i].department) - 1] = '\0';
 
         printf("Salary: ");
         scanf("%f", &data[i].salary);
@@ -74,11 +74,12 @@ int addEmployee() {
 /*
  * Prints every record in record in a readable table format.
  */
-void displayAllRecord() {
+void displayAllRecord()
+{
 
     int count = loadCountFromFile();
 
-    Employee * data = loadDataFromFile(count);
+    Employee *data = loadDataFromFile(count);
 
     for (int i = 0; i < count; i++)
     {
@@ -93,12 +94,23 @@ void displayAllRecord() {
  * Linear search by id.
  * Returns the index in emp[] if found, -1 otherwise.
  */
-int searchById(Employee emp[], int count, int id) {
+int searchById()
+{
 
-    // TODO:
-    // Loop i = 0 to count-1, compare emp[i].id == id
-    // Return i as soon as you find a match
-    // Return -1 if the loop finishes with no match
+    int count = loadCountFromFile();
+    Employee *data = loadDataFromFile(count);
+    int id;
+
+    printf("ID of the employee you want to search: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < count; i++)
+        if(data[i].id == id)
+        {
+            printf("Employee %d:\n\tId:%d\n\tName:%s\n\tDepartment:%s\n\tSalary:%.2f\n",
+               i, data[i].id, data[i].name, data[i].department, data[i].salary);
+            return i;
+        }
 
     return -1;
 }
@@ -107,7 +119,8 @@ int searchById(Employee emp[], int count, int id) {
  * Prompts for an id, finds it via searchById, then asks for and applies
  * new values. Returns 1 on success, 0 if the id wasn't found.
  */
-int updateEmployee(Employee emp[], int count) {
+int updateEmployee(Employee emp[], int count)
+{
 
     // TODO:
     // 1. Prompt for the id to update
@@ -124,7 +137,8 @@ int updateEmployee(Employee emp[], int count) {
  * records one position left. Updates *count.
  * Returns 1 on success, 0 if the id wasn't found.
  */
-int deleteEmployee(Employee emp[], int *count) {
+int deleteEmployee(Employee emp[], int *count)
+{
 
     // TODO:
     // 1. Prompt for the id to delete

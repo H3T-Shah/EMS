@@ -23,7 +23,7 @@ void nuke();
 // employee_ops.c
 int addEmployee();
 void displayAllRecord();
-int searchById(Employee emp[], int count, int id);
+int searchById();
 int updateEmployee(Employee emp[], int count);
 int deleteEmployee(Employee emp[], int *count);
 

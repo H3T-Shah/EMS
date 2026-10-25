@@ -137,16 +137,3 @@ int updateEmployee(Employee emp[], int count)
  * records one position left. Updates *count.
  * Returns 1 on success, 0 if the id wasn't found.
  */
-int deleteEmployee(Employee emp[], int *count)
-{
-
-    // TODO:
-    // 1. Prompt for the id to delete
-    // 2. int idx = searchById(emp, *count, id)
-    // 3. If idx == -1, print "not found" and return 0
-    // 4. Otherwise, for i = idx to *count-2: emp[i] = emp[i+1]
-    //    (this shifts everything after idx one slot left)
-    // 5. Decrement *count and return 1
-
-    return 0;
-}

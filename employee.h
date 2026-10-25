@@ -25,6 +25,5 @@ int addEmployee();
 void displayAllRecord();
 int searchById();
 int updateEmployee(Employee emp[], int count);
-int deleteEmployee(Employee emp[], int *count);
 
 #endif

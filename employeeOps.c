@@ -72,15 +72,21 @@ int addEmployee() {
 }
 
 /*
- * Prints every record in emp[] in a readable table format.
+ * Prints every record in record in a readable table format.
  */
-void displayAll(Employee emp[], int count) {
+void displayAllRecord() {
 
-    // TODO:
-    // 1. If count == 0, print "No records found" and return
-    // 2. Print a header row (ID | Name | Department | Salary)
-    // 3. Loop through emp[0..count-1] and print each record
+    int count = loadCountFromFile();
 
+    Employee * data = loadDataFromFile(count);
+
+    for (int i = 0; i < count; i++)
+    {
+        printf("Employee %d:\n\tId:%d\n\tName:%s\n\tDepartment:%s\n\tSalary:%.2f\n",
+               i, data[i].id, data[i].name, data[i].department, data[i].salary);
+    }
+
+    free(data);
 }
 
 /*

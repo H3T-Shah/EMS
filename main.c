@@ -1,6 +1,9 @@
+#include "employee.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <direct.h>
+#include <time.h>
 #include <windows.h>
 
 int homeScreen()
@@ -11,6 +14,8 @@ int homeScreen()
     ESC = \e = \x1b
     */
     printf("\x1b[1;1H\x1b[2J");
+
+    SetConsoleOutputCP(65001); // Setting console to UTF-8 formatting
 
     // printing ascii art
 
@@ -38,9 +43,58 @@ int homeScreen()
     printf("5. Exit\n");
 }
 
-void main()
+int main()
 {
-    SetConsoleOutputCP(65001); // Setting console to UTF-8 formatting
     unsigned short choice;
+    time_t lastWrite;
+
     homeScreen();
+
+    lastWrite = loadTimeStampFromFile();
+    if (lastWrite > 0)
+        printf("Existing Data Found.\nLast write on %s\n", ctime(&lastWrite));
+    else if (lastWrite == -2)
+        fprintf(stderr, "Existing Data Found but CAN'T READ the last write\n");
+
+    do
+    {
+        printf("\n: ");
+        scanf("%hu", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            int count;
+            printf("How many employee you want to add?\n: ");
+            scanf("%d", &count);
+            getchar(); // To catch the \n from the above scanf
+            if (addEmployee(count) == -1)
+                fprintf(stderr, "Something went wrong while writing data to record.");
+            break;
+
+        case 2:
+            int id;
+            printf("ID of the employee you want to update: ");
+            scanf("%d", &id);
+            updateEmployee(id);
+            break;
+
+        case 3:
+            printf("ID of the employee you want to search: ");
+            scanf("%d", &id);
+            int index = searchById(id);
+            if (index == -1)
+                printf("No such employee found!\n");
+
+            break;
+
+        case 4:
+            displayAllRecord();
+            break;
+            
+        default:
+            printf("Invalid choice!!\n");
+            break;
+        }
+    } while (choice != 5);
 }

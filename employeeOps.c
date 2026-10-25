@@ -15,17 +15,11 @@ int genrateId()
 }
 
 /*
- * Adds a new employee to emp[] (prompts the user for details).
+ * Adds a new employee to record
  * Returns the new count (old count + 1), or the unchanged count if full.
  */
-int addEmployee()
+int addEmployee(int count)
 {
-
-    int count;
-    printf("How many employee you want to add?\n: ");
-    scanf("%d", &count);
-    getchar(); // To catch the \n from the above scanf
-
     Employee data[count];
 
     // Prompt for name, department, salary; store into emp[count]
@@ -66,9 +60,7 @@ int addEmployee()
     }
     */
 
-    // Implement logic of saving the above data in file.
-
-    return count;
+    return saveToFile(data, count);
 }
 
 /*
@@ -94,21 +86,17 @@ void displayAllRecord()
  * Linear search by id.
  * Returns the index in emp[] if found, -1 otherwise.
  */
-int searchById()
+int searchById(int id)
 {
 
     int count = loadCountFromFile();
     Employee *data = loadDataFromFile(count);
-    int id;
-
-    printf("ID of the employee you want to search: ");
-    scanf("%d", &id);
 
     for (int i = 0; i < count; i++)
-        if(data[i].id == id)
+        if (data[i].id == id)
         {
             printf("Employee %d:\n\tId:%d\n\tName:%s\n\tDepartment:%s\n\tSalary:%.2f\n",
-               i, data[i].id, data[i].name, data[i].department, data[i].salary);
+                   i, data[i].id, data[i].name, data[i].department, data[i].salary);
             return i;
         }
 
@@ -116,24 +104,36 @@ int searchById()
 }
 
 /*
- * Prompts for an id, finds it via searchById, then asks for and applies
+ * Takes id as an input, finds it via searchById, then asks for and applies
  * new values. Returns 1 on success, 0 if the id wasn't found.
  */
-int updateEmployee(Employee emp[], int count)
+int updateEmployee(int id)
 {
+    int count = loadCountFromFile();
 
-    // TODO:
-    // 1. Prompt for the id to update
-    // 2. int idx = searchById(emp, count, id)
-    // 3. If idx == -1, print "not found" and return 0
-    // 4. Otherwise prompt for new name/department/salary,
-    //    overwrite emp[idx], and return 1
+    printf("Existing data of employee you want to update:\n");
+    int indexOfEmployee = searchById(id);
 
+    Employee data;
+
+    printf("Name: ");
+    fgets(data.name, MAX_NAME_LEN, stdin);
+
+    // using fget() to obtain string with spaces included
+
+    printf("Department: ");
+    fgets(data.department, MAX_DEPT_LEN, stdin);
+
+    // removing trailing new line character
+    data.name[strlen(data.name) - 1] = '\0';
+    data.department[strlen(data.department) - 1] = '\0';
+
+    printf("Salary: ");
+    scanf("%f", &data.salary);
+
+    // Consume the newline left by the salary scanf
+    getchar();
+    if(updateEmployeeData(data, indexOfEmployee) == 1)
+        return 1;
     return 0;
 }
-
-/*
- * Prompts for an id, finds it, and removes it by shifting later
- * records one position left. Updates *count.
- * Returns 1 on success, 0 if the id wasn't found.
- */

@@ -1,7 +1,12 @@
 # Compile Instructions
+Clone the repo with
+```
+git clone https://github.com/H3T-Shah/EMS --depth=1
+```
 
 Compile the executable with:
 ```
+cd EMS
 gcc main.c employeeOps.c fileOps.c -o main
 ```
 

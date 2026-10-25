@@ -115,6 +115,7 @@ int updateEmployee(int id)
     int indexOfEmployee = searchById(id);
 
     Employee data;
+    data.id = id;
 
     printf("Name: ");
     fgets(data.name, MAX_NAME_LEN, stdin);

@@ -90,7 +90,7 @@ int main()
             scanf("%d", &id);
             int index = searchById(id);
             if (index == -1)
-                printf("\nNo such employee found!\n");
+                printf("No such employee found!\n");
 
             break;
 

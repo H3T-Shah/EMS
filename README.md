@@ -7,10 +7,12 @@ git clone https://github.com/H3T-Shah/EMS --depth=1
 Compile the executable with:
 ```
 cd EMS
+```
+```
 gcc main.c employeeOps.c fileOps.c -o main
 ```
 
-# EMPLOYEE MANGEMENT SYSTEM
+# EMPLOYEE MANAGEMENT SYSTEM
 
 **Problem Statement** - Maintain employee ID, name, department and salary details; search, update and display records.
 

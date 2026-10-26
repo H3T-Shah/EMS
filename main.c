@@ -35,7 +35,10 @@ int homeScreen()
     fclose(ascii);
 
     // ascii art printed
+}
 
+void printOptions()
+{
     printf("\n1. Add Employee\n");
     printf("2. Update Employee\n");
     printf("3. Search Employees\n");
@@ -52,13 +55,16 @@ int main()
 
     lastWrite = loadTimeStampFromFile();
     if (lastWrite > 0)
-        printf("Existing Data Found.\nLast write on %s\n", ctime(&lastWrite));
+        printf("\nExisting Data Found.\nLast write on %s\n", ctime(&lastWrite));
+    else if (lastWrite == -1)
+        printf("\nNo Existing data found!\nIntiating a new record.\n");
     else if (lastWrite == -2)
-        fprintf(stderr, "Existing Data Found but CAN'T READ the last write\n");
+        fprintf(stderr, "\nExisting Data Found but CAN'T READ the last write\n");
 
     do
     {
-        printf("\n: ");
+        printOptions();
+        printf("\nWhat you wanna do?\n: ");
         scanf("%hu", &choice);
 
         switch (choice)
@@ -92,6 +98,7 @@ int main()
             displayAllRecord();
             break;
 
+        // If we don't make this case, default case gets executed
         case 5:
             break;
 

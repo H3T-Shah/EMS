@@ -1,22 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h> // Using srand() & rand(); malloc() & free()
+#include <stdlib.h> // malloc() & free()
 #include <string.h> // Using strlen()
 #include <time.h>   // Using time() function as a seed for rand()
 #include "employee.h"
 
-int genrateId()
-{
-    /*
-    Setting up seed for rand.
-    Seed is current time in number of seconds since Epoch.
-    */
-    srand(time(0));
-    return rand() % (10000 + 1000 + 1) + 1000;
-}
-
 /*
  * Adds a new employee to record
- * Returns the new count (old count + 1), or the unchanged count if full.
+ * Returns the value of saveToFile()
  */
 int addEmployee(int count)
 {
@@ -26,26 +16,31 @@ int addEmployee(int count)
     for (int i = 0; i < count; i++)
     {
         printf("Employee %d:\n", i + 1);
-        printf("Name: ");
-        fgets(data[i].name, MAX_NAME_LEN, stdin);
+
+        printf("  ID Number: ");
+        scanf("%d", &data[i].id);
+
+        // Consume the newline left by the ID NUmber scanf
+        getchar();
 
         // using fget() to obtain string with spaces included
 
-        printf("Department: ");
+        printf("  Name: ");
+        fgets(data[i].name, MAX_NAME_LEN, stdin);
+
+        printf("  Department: ");
         fgets(data[i].department, MAX_DEPT_LEN, stdin);
 
         // removing trailing new line character
         data[i].name[strlen(data[i].name) - 1] = '\0';
         data[i].department[strlen(data[i].department) - 1] = '\0';
 
-        printf("Salary: ");
+        printf("  Salary: ");
         scanf("%f", &data[i].salary);
 
         // Consume the newline left by the salary scanf so the NEXT
         // loop iteration's fgets() for the name works correctly.
         getchar();
-
-        data[i].id = genrateId();
     }
 
     /*
@@ -75,7 +70,7 @@ void displayAllRecord()
 
     for (int i = 0; i < count; i++)
     {
-        printf("Employee %d:\n\tId:%d\n\tName:%s\n\tDepartment:%s\n\tSalary:%.2f\n",
+        printf("Employee %d:\n  Id:%d\n  Name:%s\n  Department:%s\n  Salary:%.2f\n",
                i, data[i].id, data[i].name, data[i].department, data[i].salary);
     }
 

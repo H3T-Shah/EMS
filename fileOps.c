@@ -185,14 +185,14 @@ time_t loadTimeStampFromFile()
     file = fopen(FILENAME, "rb");
     if (file == NULL)
     {
-        fprintf(stderr, "Could NOT OPEN FILENAME");
+        // fprintf(stderr, "Could NOT OPEN FILENAME");
         return -1; // Return if file missing
     }
 
     time_t timeStamp;
     if (fread(&timeStamp, sizeof(time_t), 1, file) != 1)
     {
-        fprintf(stderr, "Could NOT READ timeStamp");
+        // fprintf(stderr, "Could NOT READ timeStamp");
         return -2;
     }
     fclose(file);

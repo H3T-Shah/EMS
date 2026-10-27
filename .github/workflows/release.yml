@@ -1,0 +1,50 @@
+# To trigger the release 
+# git tag v1.0.0
+# git push origin v1.0.0
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build executable
+        shell: bash
+        run: gcc employeeOps.c fileOps.c main.c -static -o main        # adjust to your source files
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir package
+          cp main.exe package/
+          cp -r ascii package/ascii          # your directory and its contents
+          # cp README.md package/            # optional extras
+
+      - name: Create zip
+        shell: pwsh
+        run: Compress-Archive -Path package\* -DestinationPath ems-${{ github.ref_name }}-windows.zip
+
+     - name: Save zip (test runs only)
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: myapp-test
+          path: ascii-test-${{ github.ref_name }}-windows.zip
+
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: ems-${{ github.ref_name }}-windows.zip

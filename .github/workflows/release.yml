@@ -1,4 +1,4 @@
-# To trigger the release 
+# To trigger the release
 # git tag v1.0.0
 # git push origin v1.0.0
 
@@ -21,26 +21,25 @@ jobs:
 
       - name: Build executable
         shell: bash
-        run: gcc employeeOps.c fileOps.c main.c -static -o main        # adjust to your source files
+        run: gcc employeeOps.c fileOps.c main.c -static -o main
 
       - name: Package
         shell: bash
         run: |
           mkdir package
           cp main.exe package/
-          cp -r ascii package/ascii          # your directory and its contents
-          # cp README.md package/            # optional extras
+          cp -r ascii package/ascii
 
       - name: Create zip
         shell: pwsh
         run: Compress-Archive -Path package\* -DestinationPath ems-${{ github.ref_name }}-windows.zip
 
-     - name: Save zip (test runs only)
+      - name: Save zip (test runs only)
         if: github.ref_type != 'tag'
         uses: actions/upload-artifact@v4
         with:
-          name: myapp-test
-          path: ascii-test-${{ github.ref_name }}-windows.zip
+          name: ems-test
+          path: ems-${{ github.ref_name }}-windows.zip
 
       - name: Publish release
         if: github.ref_type == 'tag'

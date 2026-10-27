@@ -17,7 +17,7 @@ jobs:
   release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build executable
         shell: bash
@@ -36,7 +36,7 @@ jobs:
 
       - name: Save zip (test runs only)
         if: github.ref_type != 'tag'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ems-test
           path: ems-${{ github.ref_name }}-windows.zip

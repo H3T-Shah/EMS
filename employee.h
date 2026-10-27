@@ -20,7 +20,6 @@ int saveToFile(Employee emp[], int count);
 time_t loadTimeStampFromFile();
 int loadCountFromFile();
 int updateEmployeeData(Employee data, int index);
-void nuke();
 
 // employee_ops.c
 int addEmployee(int count);

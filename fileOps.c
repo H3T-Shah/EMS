@@ -10,13 +10,20 @@ Employee *loadDataFromFile(int count)
     FILE *file;
     file = fopen(FILENAME, "rb");
 
+    if (file == NULL)
+    {
+        //  Could not open file
+        exit(-1);
+    }
+
     Employee *data = malloc(sizeof(Employee) * count);
 
     fseek(file, sizeof(int) + sizeof(time_t), 0);
 
     if (fread(data, sizeof(Employee), count, file) != count)
     {
-        // Error handling
+        // Could not read record into data identifier
+        exit(-2);
     }
     fclose(file);
 
@@ -50,8 +57,7 @@ int saveToFile(Employee emp[], int count)
 
         if (file == NULL)
         {
-            fprintf(stderr,
-                    "fopen encountered NULL File while CREATING it\n");
+            // fprintf(stderr, "fopen encountered NULL File while CREATING it\n");
             return -1;
         }
 
@@ -60,10 +66,9 @@ int saveToFile(Employee emp[], int count)
 
         if (fwrite(&timeStamp, sizeof(timeStamp), 1, file) != 1)
         {
-            fprintf(stderr,
-                    "fwrite was NOT able to WRITE timestamp successfully\n");
+            // fprintf(stderr, "fwrite was NOT able to WRITE timestamp successfully\n");
             fclose(file); // Prevent leak
-            return -1;
+            return -2;
         }
 
         // writing count next to the timestamp
@@ -71,25 +76,23 @@ int saveToFile(Employee emp[], int count)
         // successfully
         if (fwrite(&count, sizeof(int), 1, file) != 1)
         {
-            fprintf(stderr,
-                    "fwrite was NOT able to WRITE count to file\n");
+            // fprintf(stderr, "fwrite was NOT able to WRITE count to file\n");
             fclose(file); // Prevent leak
-            return -1;
+            return -3;
         }
 
         if (fwrite(emp, sizeof(Employee), count, file) != count)
         {
-            fprintf(stderr,
-                    "fwrite was NOT able to WRITE all or some data successfully\n");
+            // fprintf(stderr, "fwrite was NOT able to WRITE all or some data successfully\n");
             fclose(file); // Prevent leak
-            return -1;
+            return -4;
         }
 
         if (fclose(file) == EOF)
         {
             fprintf(stderr,
                     "fclose was NOT able to CLOSE file correctly\n");
-            return -1;
+            return -5;
         }
     } // End of if statement
     else
@@ -105,19 +108,17 @@ int saveToFile(Employee emp[], int count)
 
         if (file == NULL)
         {
-            fprintf(stderr,
-                    "fopen encountered NULL File while OPENING for update\n");
-            return -1;
+            // fprintf(stderr, "fopen encountered NULL File while OPENING for update\n");
+            return -11;
         }
 
         // Reading the timeStamp
         time_t oldTimeStamp;
         if (fread(&oldTimeStamp, sizeof(time_t), 1, file) != 1)
         {
-            fprintf(stderr,
-                    "Could NOT READ timestamp!");
+            // fprintf(stderr, "Could NOT READ timestamp!");
             fclose(file);
-            return -1;
+            return -12;
         }
         // After reading the timeStamp, file pointer has moved past it
         // Can implement more descriptive error handling using feof & ferror
@@ -127,10 +128,9 @@ int saveToFile(Employee emp[], int count)
         int oldCount;
         if (fread(&oldCount, sizeof(int), 1, file) != 1)
         {
-            fprintf(stderr,
-                    "Could NOT READ number of employees (count)!");
+            // fprintf(stderr, "Could NOT READ number of employees (count)!");
             fclose(file);
-            return -1;
+            return -13;
         }
 
         // Jumped to the end of file
@@ -139,10 +139,9 @@ int saveToFile(Employee emp[], int count)
         // Appending new data
         if (fwrite(emp, sizeof(Employee), count, file) != count)
         {
-            fprintf(stderr,
-                    "fwrite was NOT able to APPEND all or some data successfully\n");
+            // fprintf(stderr, "fwrite was NOT able to APPEND all or some data successfully\n");
             fclose(file); // Prevent leak
-            return -1;
+            return -14;
         }
 
         // Jumping to the beginning of file
@@ -154,27 +153,24 @@ int saveToFile(Employee emp[], int count)
 
         if (fwrite(&newTimeStamp, sizeof(time_t), 1, file) != 1)
         {
-            fprintf(stderr,
-                    "fwrite was NOT able to UPDATE timestamp successfully\n");
+            // fprintf(stderr, "fwrite was NOT able to UPDATE timestamp successfully\n");
             fclose(file); // Prevent leak
-            return -1;
+            return -15;
         }
 
         int totalCount = oldCount + count;
         if (fwrite(&totalCount, sizeof(int), 1, file) != 1)
         {
-            fprintf(stderr,
-                    "fwrite was NOT able to UPDATE count successfully\n");
+            // fprintf(stderr, "fwrite was NOT able to UPDATE count successfully\n");
             fclose(file); // Prevent leak
-            return -1;
+            return -16;
         }
 
         // Closing file
         if (fclose(file) == EOF)
         {
-            fprintf(stderr,
-                    "fclose was NOT able to CLOSE file correctly\n");
-            return -1;
+            // fprintf(stderr, "fclose was NOT able to CLOSE file correctly\n");
+            return -17;
         }
     }
 }
@@ -205,7 +201,7 @@ int loadCountFromFile()
     file = fopen(FILENAME, "rb");
     if (file == NULL)
     {
-        fprintf(stderr, "Could NOT OPEN FILENAME");
+        // fprintf(stderr, "Could NOT OPEN FILENAME");
         return -1; // Return if file missing
     }
 
@@ -213,8 +209,8 @@ int loadCountFromFile()
     fseek(file, sizeof(time_t), SEEK_SET);
     if (fread(&count, sizeof(int), 1, file) != 1)
     {
-        fprintf(stderr, "Could NOT READ count");
-        return -1;
+        // fprintf(stderr, "Could NOT READ count");
+        return -2;
     }
     fclose(file);
     return count;
@@ -239,9 +235,15 @@ int updateEmployeeData(Employee data, int index)
         return -2;
     }
 
-    return 1;
-}
+    time_t currTimeStamp = time(NULL);
 
-void nuke()
-{
+    // Moving to the start of file
+    fseek(file, 0, SEEK_SET);
+    if (fwrite(&currTimeStamp, sizeof(time_t), 1, file) != 1)
+    {
+        // fwrite could not update time stamp
+        return -3;
+    }
+
+    return 1;
 }

@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <direct.h>
 #include <time.h>
 #include <windows.h>
 
@@ -90,8 +89,7 @@ int main()
             scanf("%d", &id);
             int index = searchById(id);
             if (index == -1)
-                printf("No such employee found!\n");
-
+                printf("\nNo such employee found!\n");
             break;
 
         case 4:

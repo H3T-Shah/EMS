@@ -20,7 +20,7 @@ int addEmployee(int count)
         printf("  ID Number: ");
         scanf("%d", &data[i].id);
 
-        // Consume the newline left by the ID NUmber scanf
+        // Consume the newline left by the ID Number scanf
         getchar();
 
         // using fget() to obtain string with spaces included
@@ -71,7 +71,7 @@ void displayAllRecord()
     for (int i = 0; i < count; i++)
     {
         printf("Employee %d:\n  Id:%d\n  Name:%s\n  Department:%s\n  Salary:%.2f\n",
-               i, data[i].id, data[i].name, data[i].department, data[i].salary);
+               i + 1, data[i].id, data[i].name, data[i].department, data[i].salary);
     }
 
     free(data);
@@ -106,34 +106,39 @@ int updateEmployee(int id)
 {
     int count = loadCountFromFile();
 
-    printf("Existing data of employee you want to update:\n");
     int indexOfEmployee = searchById(id);
     if(indexOfEmployee == -1)
     {
-        printf("Didn't find an employee with id: %d", id);
+        printf("\nDidn't find an employee with ID Number: %d", id);
         return 0;
     }
+    printf("Existing data of employee you want to update:\n");
     Employee data;
-    data.id = id;
+    printf("#########################################\nUpdate the data:\n");
+    printf("  ID Number: ");
+    scanf("%d", &data.id);
+    // Consume new line left by ID Number scanf
+    getchar();
 
-    printf("Name: ");
+    printf("  Name: ");
     fgets(data.name, MAX_NAME_LEN, stdin);
 
     // using fget() to obtain string with spaces included
 
-    printf("Department: ");
+    printf("  Department: ");
     fgets(data.department, MAX_DEPT_LEN, stdin);
 
     // removing trailing new line character
     data.name[strlen(data.name) - 1] = '\0';
     data.department[strlen(data.department) - 1] = '\0';
 
-    printf("Salary: ");
+    printf("  Salary: ");
     scanf("%f", &data.salary);
 
     // Consume the newline left by the salary scanf
     getchar();
     if(updateEmployeeData(data, indexOfEmployee) == 1)
         return 1;
+
     return 2;
 }

@@ -173,6 +173,8 @@ int saveToFile(Employee emp[], int count)
             return -17;
         }
     }
+
+    return 0;
 }
 
 time_t loadTimeStampFromFile()
@@ -232,6 +234,7 @@ int updateEmployeeData(Employee data, int index)
     if (fwrite(&data, sizeof(Employee), 1, file) != 1)
     {
         fprintf(stderr, "Could NOT write updated data of employee");
+        fclose(file);
         return -2;
     }
 
@@ -242,8 +245,10 @@ int updateEmployeeData(Employee data, int index)
     if (fwrite(&currTimeStamp, sizeof(time_t), 1, file) != 1)
     {
         // fwrite could not update time stamp
+        fclose(file);
         return -3;
     }
 
+    fclose(file);
     return 1;
 }

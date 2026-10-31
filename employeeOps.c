@@ -1,143 +1,105 @@
 #include <stdio.h>
-#include <stdlib.h> // malloc() & free()
-#include <string.h> // Using strlen()
-#include <time.h>   // Using time() function as a seed for rand()
+#include <stdlib.h> // free()
 #include "employee.h"
+#include "ui.h"
 
 /*
- * Adds a new employee to record
- * Returns the value of saveToFile()
+ * Adds new employees to the record
+ * Returns the value of saveToFile() (negative means something went wrong)
  */
 int addEmployee(int count)
 {
     Employee data[count];
 
-    // Prompt for name, department, salary; store into emp[count]
     for (int i = 0; i < count; i++)
     {
-        printf("Employee %d:\n", i + 1);
+        printf("\n  " C_BOLD "Employee %d of %d" C_RESET "\n\n", i + 1, count);
 
-        printf("  ID Number: ");
-        scanf("%d", &data[i].id);
-
-        // Consume the newline left by the ID Number scanf
-        getchar();
-
-        // using fget() to obtain string with spaces included
-
-        printf("  Name: ");
-        fgets(data[i].name, MAX_NAME_LEN, stdin);
-
-        printf("  Department: ");
-        fgets(data[i].department, MAX_DEPT_LEN, stdin);
-
-        // removing trailing new line character
-        data[i].name[strlen(data[i].name) - 1] = '\0';
-        data[i].department[strlen(data[i].department) - 1] = '\0';
-
-        printf("  Salary: ");
-        scanf("%f", &data[i].salary);
-
-        // Consume the newline left by the salary scanf so the NEXT
-        // loop iteration's fgets() for the name works correctly.
-        getchar();
+        // The read...() helpers (see ui.c) keep asking until the input is valid.
+        // readLine() uses fgets() inside, so names with spaces work too.
+        data[i].id = readInt("ID Number", 1, MAX_ID);
+        readLine("Name", data[i].name, MAX_NAME_LEN);
+        readLine("Department", data[i].department, MAX_DEPT_LEN);
+        data[i].salary = readFloat("Salary", 0, MAX_SALARY);
     }
-
-    /*
-    printf("\n__________________________DEBUG__________________________\n");
-    for (int i = 0; i < count; i++)
-    {
-        printf("\nName: %s\nDepartment: %s\nSalary: %f\nId: %d",
-               data[i].name,
-               data[i].department,
-               data[i].salary,
-               data[i].id);
-    }
-    */
 
     return saveToFile(data, count);
 }
 
 /*
- * Prints every record in record in a readable table format.
+ * Prints every record in a readable table format.
  */
 void displayAllRecord()
 {
-
     int count = loadCountFromFile();
+
+    // No file yet (-1) or nothing in it: loadDataFromFile() would exit the program
+    if (count <= 0)
+    {
+        printInfo("No records yet. Add an employee first.");
+        return;
+    }
 
     Employee *data = loadDataFromFile(count);
 
-    for (int i = 0; i < count; i++)
-    {
-        printf("Employee %d:\n  Id:%d\n  Name:%s\n  Department:%s\n  Salary:%.2f\n",
-               i + 1, data[i].id, data[i].name, data[i].department, data[i].salary);
-    }
+    printEmployeeTable(data, count);
+    printf("\n  " C_DIM "%d record%s" C_RESET "\n", count, count == 1 ? "" : "s");
 
     free(data);
 }
 
 /*
- * Linear search by id.
- * Returns the index in emp[] if found, -1 otherwise.
+ * Linear search by id. Prints the record as a table when found.
+ * Returns the index in the record if found, -1 otherwise.
  */
 int searchById(int id)
 {
-
     int count = loadCountFromFile();
+
+    if (count <= 0)
+        return -1;
+
     Employee *data = loadDataFromFile(count);
 
     for (int i = 0; i < count; i++)
         if (data[i].id == id)
         {
-            printf("Employee %d:\n\tId:%d\n\tName:%s\n\tDepartment:%s\n\tSalary:%.2f\n",
-                   i, data[i].id, data[i].name, data[i].department, data[i].salary);
+            printf("\n  " C_GREEN "Record found:" C_RESET "\n");
+            printEmployeeTable(&data[i], 1);
+
+            free(data);
             return i;
         }
 
+    free(data);
     return -1;
 }
 
 /*
  * Takes id as an input, finds it via searchById, then asks for and applies
- * new values. Returns 1 on success, 0 if the id wasn't found.
+ * new values. Returns 1 on success, 0 if the id wasn't found,
+ * 2 if the employee was found but the file could not be updated.
  */
 int updateEmployee(int id)
 {
-    int count = loadCountFromFile();
-
     int indexOfEmployee = searchById(id);
-    if(indexOfEmployee == -1)
+
+    if (indexOfEmployee == -1)
     {
-        printf("\nDidn't find an employee with ID Number: %d", id);
+        printError("No employee found with that ID Number.");
         return 0;
     }
-    printf("Existing data of employee you want to update:\n");
+
     Employee data;
-    printf("#########################################\nUpdate the data:\n");
-    printf("  ID Number: ");
-    scanf("%d", &data.id);
-    // Consume new line left by ID Number scanf
-    getchar();
 
-    printf("  Name: ");
-    fgets(data.name, MAX_NAME_LEN, stdin);
+    printf("\n  " C_BOLD "Enter the new details" C_RESET " (every field is required)\n\n");
 
-    // using fget() to obtain string with spaces included
+    data.id = readInt("ID Number", 1, MAX_ID);
+    readLine("Name", data.name, MAX_NAME_LEN);
+    readLine("Department", data.department, MAX_DEPT_LEN);
+    data.salary = readFloat("Salary", 0, MAX_SALARY);
 
-    printf("  Department: ");
-    fgets(data.department, MAX_DEPT_LEN, stdin);
-
-    // removing trailing new line character
-    data.name[strlen(data.name) - 1] = '\0';
-    data.department[strlen(data.department) - 1] = '\0';
-
-    printf("  Salary: ");
-    scanf("%f", &data.salary);
-
-    // Consume the newline left by the salary scanf
-    getchar();
-    if(updateEmployeeData(data, indexOfEmployee) == 1)
+    if (updateEmployeeData(data, indexOfEmployee) == 1)
         return 1;
 
     return 2;

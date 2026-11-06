@@ -21,7 +21,7 @@ jobs:
 
       - name: Build executable
         shell: bash
-        run: gcc employeeOps.c fileOps.c main.c -static -o main
+        run: gcc employeeOps.c fileOps.c ui.c main.c -static -o main
 
       - name: Package
         shell: bash

@@ -38,7 +38,7 @@ jobs:
         if: github.ref_type != 'tag'
         uses: actions/upload-artifact@v6
         with:
-          name: ems-test
+          name: ems-test-dev
           path: ems-${{ github.ref_name }}-windows.zip
 
       - name: Publish release
